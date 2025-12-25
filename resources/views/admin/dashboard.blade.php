@@ -1,4 +1,6 @@
-<x-admin-layout :breadcrumbs="[
+<x-admin-layout 
+title="Dashboard"
+:breadcrumbs="[
     [
         'name' => 'Dashboard',
         'href' => route('admin.dashboard'),
@@ -11,5 +13,5 @@
 
 
     
-    Hola desde el admin
+    
 </x-admin-layout>
