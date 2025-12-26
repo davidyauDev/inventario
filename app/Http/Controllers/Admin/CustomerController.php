@@ -100,7 +100,7 @@ class CustomerController extends Controller
         if($customer->quotes()->exists() || $customer->sales()->exists())
         {
             session()->flash('swal', [
-                'icon' => 'errors',
+                'icon' => 'error',
                 'title' => 'Error',
                 'text' => 'No se puede eliminar el cliente porque tiene cotizaciones o ventas asociadas.',
             ]);

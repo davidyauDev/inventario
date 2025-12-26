@@ -1,5 +1,8 @@
 @php
-$links = [
+    $links = [
+        [
+            'header' => 'Principal',
+        ],
         [
             'name' => 'Dashboard',
             'icon' => 'fa-solid fa-gauge',
@@ -7,29 +10,138 @@ $links = [
             'active' => request()->routeIs('admin.dashboard'),
         ],
         [
-            'name' => 'Categorías',
-            'icon' => 'fa-solid fa-list',
-            'href' => route('admin.categories.index'),
-            'active' => request()->routeIs('admin.categories.*'),
+            'name' => 'Inventario',
+            'icon' => 'fa-solid fa-boxes-stacked',
+            'active' => request()->routeIs([
+                'admin.categories.*',
+                'admin.products.*',
+                'admin.warehouses.*',
+            ]),
+            'submenu' => [
+                [
+                    'name' => 'Categorías',
+                    'icon' => 'fa-solid fa-list',
+                    'href' => route('admin.categories.index'),
+                    'active' => request()->routeIs('admin.categories.*'),
+                ],
+                [
+                    'name' => 'Productos',
+                    'icon' => 'fa-solid fa-box',
+                    'href' => route('admin.products.index'),
+                    'active' => request()->routeIs('admin.products.*'),
+                ],
+                [
+                    'name' => 'Almacenes',
+                    'icon' => 'fa-solid fa-warehouse',
+                    'href' => route('admin.warehouses.index'),
+                    'active' => request()->routeIs('admin.warehouses.*'),
+                ],
+            ],
+        ],
+
+        [
+            'name' => 'Compras',
+            'icon' => 'fa-solid fa-cart-shopping',
+            'active' => request()->routeIs([
+                'admin.suppliers.*',
+            ]),
+            'submenu' => [
+                [
+                    'name' => 'Proveedores',
+                    'href' => route('admin.suppliers.index'),
+                    'active' => request()->routeIs('admin.suppliers.*'),
+                ],
+                [
+                    'name' => 'Ordenes de Compra',
+                    'href' => '',
+                    'active' => false,
+                ],
+                [
+                    'name' => 'Compras',
+                    'href' => '',
+                    'active' => false,
+                ],
+            ],
+        ],
+
+        [
+            'name' => 'Ventas',
+            'icon' => 'fa-solid fa-cash-register',
+            'active' => request()->routeIs([
+                'admin.customers.*',
+            ]),
+            'submenu' => [
+                [
+                    'name' => 'Clientes',
+                    'href' => route('admin.customers.index'),
+                    'active' => request()->routeIs('admin.customers.*'),
+                ],
+                [
+                    'name' => 'Cotizaciones',
+                    'href' => '',
+                    'active' => false,
+                ],
+                [
+                    'name' => 'Ventas',
+                    'href' => '',
+                    'active' => false,
+                ],
+            ],
         ],
         [
-            'name' => 'Productos',
-            'icon' => 'fa-solid fa-box',
-            'href' => route('admin.products.index'),
-            'active' => request()->routeIs('admin.products.*'),
+            'name' => 'Movimientos',
+            'icon' => 'fa-solid fa-arrows-rotate',
+            'active' => false,
+            'submenu' => [
+                [
+                    'name' => 'Entradas y Salidas',
+                    'href' => '',
+                    'active' => false,
+                ],
+                [
+                    'name' => 'Transferencias',
+                    'href' => '',
+                    'active' => false,
+                ],
+            ],
+
+        ],
+
+        [
+            'name' => 'Reportes',
+            'icon' => 'fa-solid fa-chart-line',
+            'active' => false,
+            'href' => '',
+        ],
+
+        [
+            'header' => 'Configuración',
         ],
         [
-            'name' => 'Clientes',
+            'name' => 'Usuarios',
             'icon' => 'fa-solid fa-users',
-            'href' => route('admin.customers.index'),
-            'active' => request()->routeIs('admin.customers.*'),
+            'href' => '',
+            'active' => false,     
         ],
         [
-            'name' => 'Proveedores',
-            'icon' => 'fa-solid fa-truck',
-            'href' => route('admin.suppliers.index'),
-            'active' => request()->routeIs('admin.suppliers.*'),
+            'name' => 'Roles',
+            'icon' => 'fa-solid fa-shield-halved',
+            'href' => '',
+            'active' => false,     
         ],
+        [
+            'name' => 'Permisos',
+            'icon' => 'fa-solid fa-lock',
+            'href' => '',
+            'active' => false,     
+        ],
+        [
+            'name' => 'Ajustes',
+            'icon' => 'fa-solid fa-gear',
+            'href' => '',
+            'active' => false,     
+        ],
+
     ];
 @endphp
 
@@ -52,53 +164,64 @@ $links = [
 
                 {{-- HEADER --}}
                 @isset($link['header'])
-                <div class="px-2 py-2 text-xs font-semibold text-gray-500 uppercase">
-                    {{ $link['header'] }}
-                </div>
+                    <div class="px-2 py-2 text-xs font-semibold text-gray-500 uppercase">
+                        {{ $link['header'] }}
+                    </div>
                 @else
 
                 {{-- ITEM CON SUBMENU --}}
                 @isset($link['submenu'])
-                <button type="button"
-                    class="flex items-center w-full px-2 py-1.5 text-body rounded-base
-                                hover:bg-neutral-tertiary hover:text-fg-brand group"
-                    aria-controls="dropdown-example"
-                    data-collapse-toggle="dropdown-example">
+                    <div x-data="{
+                        open: {{ $link ['active'] ? 'true' : 'false'}}
+                    }">
 
-                    <span class="w-5 h-5 inline-flex justify-center items-center text-gray-500">
-                        <i class="{{ $link['icon'] }}"></i>
-                    </span>
+                        <button 
+                            type="button"
+                            @click="open = !open"
+                            class="flex items-center w-full px-2 py-1.5 text-body rounded-base
+                                        hover:bg-neutral-tertiary hover:text-fg-brand group">
 
-                    <span class="ms-3 whitespace-nowrap">
-                        {{ $link['name'] }}
-                    </span>
-
-                    <svg class="w-5 h-5 ml-auto text-gray-500"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2"
-                            d="m19 9-7 7-7-7" />
-                    </svg>
-                </button>
-
-                <ul id="dropdown-example" class="hidden mt-1 space-y-1">
-                    @foreach ($link['submenu'] as $item)
-                    <li>
-                        <a href="{{ $item['href'] }}"
-                            class="flex items-center px-2 py-1.5 text-body rounded-base
-                                hover:bg-neutral-tertiary hover:text-fg-brand">
-
-                            {{-- espacio icono --}}
-                            <span class="w-5 h-5 inline-flex justify-center items-center"></span>
-
-                            <span class="ms-3">
-                                {{ $item['name'] }}
+                            <span class="w-5 h-5 inline-flex justify-center items-center text-gray-500">
+                                <i class="{{ $link['icon'] }}"></i>
                             </span>
-                        </a>
-                    </li>
-                    @endforeach
-                </ul>
+
+                            <span class="ms-3 whitespace-nowrap">
+                                {{ $link['name'] }}
+                            </span>
+
+                            <!--<svg class="w-5 h-5 ml-auto text-gray-500"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2"
+                                    d="m19 9-7 7-7-7" />
+                            </svg>-->
+
+                            <i
+                                class="fa-solid text-sm ms-auto"
+                                :class="open ? 'fa-chevron-up' : 'fa-chevron-down'">
+                            </i>
+                        </button>
+
+                        <ul x-show="open" x-cloak class="mt-1 space-y-1">
+                            @foreach ($link['submenu'] as $item)
+                                <li>
+                                    <a href="{{ $item['href'] }}"
+                                        class="flex items-center px-2 py-1.5 text-body rounded-base
+                                            hover:bg-neutral-tertiary hover:text-fg-brand {{ $item ['active'] ? 'bg-gray-100': ''}}">
+
+                                        {{-- espacio icono --}}
+                                        <span class="w-5 h-5 inline-flex justify-center items-center"></span>
+
+                                        <span class="ms-3">
+                                            {{ $item['name'] }}
+                                        </span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+
+                    </div>
 
                 {{-- ITEM NORMAL --}}
                 @else

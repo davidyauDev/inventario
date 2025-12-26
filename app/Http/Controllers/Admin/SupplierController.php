@@ -100,7 +100,7 @@ class SupplierController extends Controller
         if($supplier->purchaseOrders()->exists() || $supplier->purchases()->exists())
         {
             session()->flash('swal', [
-                'icon' => 'errors',
+                'icon' => 'error',
                 'title' => 'Error',
                 'text' => 'No se puede eliminar el proveedor porque tiene ordenes de compras o compras asociadas.',
             ]);

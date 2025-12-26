@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             IdentitySeeder::class,
-            CategorySeeder::class
+            CategorySeeder::class,
+            WarehouseSeeder::class,
         ]);
 
         Customer::factory(50)->create();

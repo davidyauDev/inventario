@@ -11,4 +11,9 @@ class Warehouse extends Model
         'name',
         'location',
     ];
+
+    public function inventories()
+    {
+        return $this->hasMany(Inventory::class);
+    }
 }
