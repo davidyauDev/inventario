@@ -20,6 +20,9 @@
     <!-- Fontawesome -->
     <script src="https://kit.fontawesome.com/bd62c725a7.js" crossorigin="anonymous"></script>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <!-- wireui -->
     <wireui:scripts />
 
@@ -28,6 +31,9 @@
 
     <!-- Styles -->
     @livewireStyles
+
+    @stack('css')
+    
 </head>
 
 <body class="font-sans antialiased">
@@ -61,6 +67,17 @@
     @livewireScripts
     
     <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
+
+    @if(session('swal'))
+
+        <script>
+            Swal.fire(@json(session('swal')));
+        </script>
+
+    @endif
+
+    @stack('js')
+
 </body>
 
 </html>
