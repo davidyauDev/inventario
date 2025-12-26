@@ -1,27 +1,18 @@
-
-
 @php
 $links = [
-[
-'name' => 'Dashboard',
-'icon' => 'fa-solid fa-gauge',
-'href' => route('admin.dashboard'),
-'active' => request()->routeIs('admin.dashboard'),
-],
-[
-'header' => 'Administrar página',
-],
-[
-'name' => 'Dashboard',
-'icon' => 'fa-solid fa-gauge',
-'active' => false,
-'submenu' => [
-['name' => 'Products', 'href' => '#'],
-['name' => 'Billing', 'href' => '#'],
-['name' => 'Invoice', 'href' => '#'],
-],
-],
-];
+        [
+            'name' => 'Dashboard',
+            'icon' => 'fa-solid fa-gauge',
+            'href' => route('admin.dashboard'),
+            'active' => request()->routeIs('admin.dashboard'),
+        ],
+        [
+            'name' => 'Categorías',
+            'icon' => 'fa-solid fa-list',
+            'href' => route('admin.categories.index'),
+            'active' => request()->routeIs('admin.categories.*'),
+        ],
+    ];
 @endphp
 
 <aside id="top-bar-sidebar"

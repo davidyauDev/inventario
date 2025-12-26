@@ -1,13 +1,16 @@
 <x-admin-layout 
-title="Dashboard"
+title="Categorías"
 :breadcrumbs="[
     [
         'name' => 'Dashboard',
         'href' => route('admin.dashboard'),
     ],
     [
-        'name' => 'Pruebas',
-        
+        'name' => 'Categorías',
+        'href' => route('admin.categories.index'),
+    ],
+    [
+        'name' => 'Editar',
     ]
 ]">
 

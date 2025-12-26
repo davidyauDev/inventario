@@ -36,7 +36,7 @@
 
     @include('layouts.includes.admin.sidebar')
 
-    <div class="p-4 sm:ml-64 mt-14 bg-gray-50 min-h-screen">
+    <div class="p-4 sm:ml-64 mt-14 bg-gray-50">
 
         <div class="flex items-center ">
             
