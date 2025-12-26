@@ -18,6 +18,18 @@ $links = [
             'href' => route('admin.products.index'),
             'active' => request()->routeIs('admin.products.*'),
         ],
+        [
+            'name' => 'Clientes',
+            'icon' => 'fa-solid fa-users',
+            'href' => route('admin.customers.index'),
+            'active' => request()->routeIs('admin.customers.*'),
+        ],
+        [
+            'name' => 'Proveedores',
+            'icon' => 'fa-solid fa-truck',
+            'href' => route('admin.suppliers.index'),
+            'active' => request()->routeIs('admin.suppliers.*'),
+        ],
     ];
 @endphp
 

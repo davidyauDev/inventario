@@ -4,13 +4,12 @@ namespace App\Livewire\Admin\Datatables;
 
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
-use App\Models\Product;
+use App\Models\Customer;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Columns\ImageColumn;
 
-class ProductTable extends DataTableComponent
+class CustomerTable extends DataTableComponent
 {
-    /* protected $model = Product::class; */
+    //protected $model = Customer::class;
 
     public function configure(): void
     {
@@ -23,38 +22,28 @@ class ProductTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            ImageColumn::make('Image')
-                ->location(
-                    fn($row) => $row->image
-                )->attributes(
-                    fn($row) => [
-                        'class' => 'image-product',
-                    ]
-                ),
-
-            Column::make("Nombre", "name")
+            Column::make("Tipo Doc", "identity.name")
+                ->sortable(),
+            Column::make("Num Doc", "document_number")
                 ->searchable()
                 ->sortable(),
-            Column::make("Categoría", "category.name")
+            Column::make("Razón social", "name")
                 ->searchable()
                 ->sortable(),
-            Column::make("Precio", "price")
+            Column::make("Correo", "email")
+                ->sortable(),
+            Column::make("Teléfono", "phone")
                 ->sortable(),
             Column::make('Acciones')
                 ->label(function($row){
-                    return view('admin.products.actions',['product'=>$row]);
+                    return view('admin.customers.actions',['customer'=>$row]);
                 })
-
-
         ];
     }
 
     public function builder(): Builder
     {
-        return Product::query()
-            ->with(['category', 'images']);
+        return Customer::query()
+            ->with(['identity']);
     }
-
-
-
 }
