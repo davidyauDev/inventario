@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -19,6 +21,14 @@ class Product extends Model
         'category_id',
     ];
 
+    //Accesores
+    protected function image() : Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->images->count() ? Storage::url($this->images->first()->path) : 'https://dicesabajio.com.mx/wp-content/uploads/2021/06/no-image.jpeg',
+        );
+    }
+
     //Relación uno a muchos inversa
     public function category()
     {
@@ -29,6 +39,17 @@ class Product extends Model
     public function inventories()
     {
         return $this->hasMany(Inventory::class);
+    }
+
+    //Relación muchos a muchos polimórfica
+    public function purchaseOrders()
+    {
+        return $this->morphToMany(PurchaseOrder::class, 'productable');
+    }
+
+    public function quotes()
+    {
+        return $this->morphedByMany(Quote::class, 'productable');
     }
 
     //Relación polimórfica

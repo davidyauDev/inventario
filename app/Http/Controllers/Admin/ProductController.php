@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProductController extends Controller
 {
@@ -21,7 +24,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create');
+        $categories = Category::all();
+        return view('admin.products.create', compact('categories'));
     }
 
     /**
@@ -29,7 +33,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $product = Product::create($data);
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => '¡Bien hecho!',
+            'text' => 'EL producto se ha creado correctamente.'
+        ]);
+
+        return redirect()->route('admin.products.index');
     }
 
 
@@ -38,7 +57,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('admin.products.edit', compact('product'));
+        $categories = Category::all();
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     /**
@@ -46,7 +66,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $product->update($data);
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => '¡Bien hecho!',
+            'text' => 'EL producto se ha actualizado correctamente.'
+        ]);
+
+        return redirect()->route('admin.products.edit', $product);
+
     }
 
     /**
@@ -54,6 +90,48 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+
+        if ($product->inventories()->exists()){
+            session()->flash('swal', [
+                'icon' => 'error',
+                'title' => '¡Error!',
+                'text' => 'No se puede eliminar el producto porque tiene inventarios asociados.'
+            ]);
+        }
+
+        if ($product->purchaseOrders()->exists()|| $product->quote()->exists()){
+            session()->flash('swal', [
+                'icon' => 'error',
+                'title' => '¡Error!',
+                'text' => 'No se puede eliminar el producto porque tiene ordenes de compra o cotizaciones asociadas.'
+            ]);
+
+            return redirect()->route('admin.products.index');
+
+        }
+
+        $product ->delete();
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => '¡Bien hecho!',
+            'text' => 'EL producto se ha eliminado correctamente.'
+        ]);
+
+        return redirect()->route('admin.products.index');
+
+    }
+
+    public function dropzone(Request $request, Product $product)
+    {
+        $image = $product->images()->create([
+            'path' => Storage::put('/images', $request->file('file')),
+            'size' => $request->file('file')->getSize(),
+        ]);
+
+        return response()->json([
+            'id' => $image->id,
+            'path' => $image->path,
+        ]);
     }
 }
