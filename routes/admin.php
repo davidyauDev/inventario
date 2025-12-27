@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\PurchaseOrderController;
 use App\Http\Controllers\Admin\QuoteController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,8 @@ Route::resource('sales',SaleController::class)
 Route::resource('movements',MovementController::class)
     ->only(['index', 'create']);
 
+Route::resource('transfers',TransferController::class)
+    ->only(['index', 'create']);
 
 
 Route::delete('images/{image}', [ImageController::class, 'destroy'])

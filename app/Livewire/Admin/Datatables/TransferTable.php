@@ -6,9 +6,10 @@ use App\Models\Movement;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Quote;
+use App\Models\Transfer;
 use Illuminate\Database\Eloquent\Builder;
 
-class MovementTable extends DataTableComponent
+class TransferTable extends DataTableComponent
 {
     //protected $model = PurchaseOrder::class;
 
@@ -28,26 +29,15 @@ class MovementTable extends DataTableComponent
                 ->sortable()
                 ->format(fn($value) => $value->format('Y-m-d')),
 
-            Column::make("Tipo", "type")
-                ->sortable()
-                ->format(
-                    fn($value) => match($value){
-                        1 => 'Ingreso',
-                        2 => 'Salida',
-                        default => 'Desconocido',
-                    }
-                ),
-            
             Column::make("Serie", "serie")
                 ->sortable(),
 
             Column::make("Correlativo", "correlative")
                 ->sortable(),
 
-            Column::make("Almacen", "warehouse.name")
+            Column::make("Almacen Origen", "originWarehouse.name")
                 ->sortable(),
-
-            Column::make("Motivo", "reason.name")
+            Column::make("Almacen Destino", "destinationWarehouse.name")
                 ->sortable(),
 
             Column::make("Total", "total")
@@ -56,8 +46,8 @@ class MovementTable extends DataTableComponent
             
             Column::make('Acciones')
                 ->label(function($row){
-                    return view('admin.movements.actions',[
-                        'movement' => $row,
+                    return view('admin.transfers.actions',[
+                        'transfer' => $row,
                     ]);
                 })
         ];
@@ -65,10 +55,10 @@ class MovementTable extends DataTableComponent
 
     public function builder(): Builder
     {
-        return Movement::query()
+        return Transfer::query()
             ->with([
-                'warehouse',
-                'reason',
+                'originWarehouse',
+                'destinationWarehouse',
             ]);
     }
 }
