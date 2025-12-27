@@ -1,21 +1,22 @@
 <x-admin-layout 
-title="Ordenes de Compra"
+title="Compras"
 :breadcrumbs="[
     [
         'name' => 'Dashboard',
         'href' => route('admin.dashboard'),
     ],
     [
-        'name' => 'Ordenes de Compra',
-        'href' => route('admin.purchase-orders.index'),
+        'name' => 'Compras',
+        'href' => route('admin.purchases.index'),
     ],
     [
         'name' => 'Nuevo',
+        
     ]
 ]">
 
 
-    @livewire('admin.purchase-order-create')
+    @livewire('admin.purchase-create')
 
 
 </x-admin-layout>
