@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Admin\Datatables;
 
+use App\Models\Purchase;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
-use App\Models\Quote;
+use App\Models\PurchaseOrder;
+use App\Models\Sale;
 use Illuminate\Database\Eloquent\Builder;
 
-class QuoteTable extends DataTableComponent
+class SaleTable extends DataTableComponent
 {
     //protected $model = PurchaseOrder::class;
 
@@ -44,8 +46,8 @@ class QuoteTable extends DataTableComponent
             
             Column::make('Acciones')
                 ->label(function($row){
-                    return view('admin.quotes.actions',[
-                        'quote' => $row,
+                    return view('admin.sales.actions',[
+                        'sale' => $row,
                     ]);
                 })
         ];
@@ -53,7 +55,7 @@ class QuoteTable extends DataTableComponent
 
     public function builder(): Builder
     {
-        return Quote::query()
+        return Sale::query()
             ->with(['customer']);
     }
 }

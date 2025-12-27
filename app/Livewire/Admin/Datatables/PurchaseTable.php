@@ -45,8 +45,8 @@ class PurchaseTable extends DataTableComponent
             
             Column::make('Acciones')
                 ->label(function($row){
-                    return view('admin.purchase_orders.actions',[
-                        'purchaseOrder' => $row,
+                    return view('admin.purchases.actions',[
+                        'purchase' => $row,
                     ]);
                 })
         ];
