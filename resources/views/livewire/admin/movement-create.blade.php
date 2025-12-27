@@ -28,32 +28,30 @@
 
             <div class="grid lg:grid-cols-4 gap-4">
                 <x-wire-native-select
-                    label="Tipo de comprobante"
-                    wire:model="voucher_type">
+                    label="Tipo de movimiento"
+                    wire:model.live="type">
 
                     <option value="1">
-                        Factura
+                        Ingreso
                     </option>
 
                     <option value="2">
-                        Boleta
+                        Salida
                     </option>
 
                 </x-wire-native-select>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <x-wire-input
-                        label="Serie"
-                        wire:model="serie"
-                        placeholder="Serie del comprobante"
-                        disabled />
+                <x-wire-input
+                    label="Serie"
+                    wire:model="serie"
+                    placeholder="Serie del comprobante"
+                    disabled />
 
-                    <x-wire-input
-                        label="Correlativo"
-                        wire:model="correlative"
-                        placeholder="Correlativo del comprobante"
-                        disabled />
-                </div>
+                <x-wire-input
+                    label="Correlativo"
+                    wire:model="correlative"
+                    placeholder="Correlativo del comprobante"
+                    disabled />
 
                 <x-wire-input
                     label="Fecha"
@@ -61,11 +59,12 @@
                     type="date" />
 
                 <x-wire-select
-                    label="Cotización"
-                    wire:model.live="quote_id"
-                    placeholder="Seleccione una cotización"
+                    class="lg:col-span-2"
+                    label="Almacenes"
+                    wire:model="warehouse_id"
+                    placeholder="Seleccione un almacén"
                     :async-data="[
-                        'api' => route('api.sales.index'),
+                        'api' => route('api.warehouses.index'),
                         'method' => 'POST',
                     ]"
                     option-label="name"
@@ -73,35 +72,21 @@
                     option-description="description"
                 />
 
-                <div class ="col-span-2">
-                    <x-wire-select
-                    label="Cliente"
-                    wire:model="customer_id"
-                    placeholder="Seleccione un cliente"
+                <x-wire-select
+                    class="lg:col-span-2"
+                    label="Motivo"
+                    wire:model="reason_id"
+                    placeholder="Seleccione un motivo"
                     :async-data="[
-                        'api' => route('api.customers.index'),
+                        'api' => route('api.reasons.index'),
                         'method' => 'POST',
+                        'params' => [
+                            'type' => $type,    
+                        ],
                     ]"
                     option-label="name"
                     option-value="id"
                 />
-                </div>
-
-                <div class ="col-span-2">
-                    <x-wire-select
-                        label="Almacenes"
-                        wire:model="warehouse_id"
-                        placeholder="Seleccione un almacén"
-                        :async-data="[
-                            'api' => route('api.warehouses.index'),
-                            'method' => 'POST',
-                        ]"
-                        option-label="name"
-                        option-value="id"
-                        option-description="description"
-                    />
-                </div>
-
             </div>
 
             
