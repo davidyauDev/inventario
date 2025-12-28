@@ -7,6 +7,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Quote;
 use Illuminate\Database\Eloquent\Builder;
+use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
 
 class MovementTable extends DataTableComponent
 {
@@ -16,6 +17,22 @@ class MovementTable extends DataTableComponent
     {
         $this->setPrimaryKey('id');
         $this->setDefaultSort('id', 'desc');
+    }
+
+    public function filters(): array
+    {
+        return[
+            DateRangeFilter::make('Fecha')
+                ->config([
+                    'placeholder' => 'Seleccione rango de fechas',
+                ])
+                ->filter(function($query, array $dateRange){
+                    $query->whereBetween('date', [
+                        $dateRange['minDate'],
+                        $dateRange['maxDate']
+                    ]);
+                })
+        ];
     }
 
     public function columns(): array

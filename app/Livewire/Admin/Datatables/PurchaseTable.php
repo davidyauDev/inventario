@@ -6,7 +6,10 @@ use App\Models\Purchase;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\PurchaseOrder;
+use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Builder;
+use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
+use Rappasoft\LaravelLivewireTables\Views\Filters\MultiSelectFilter;
 
 class PurchaseTable extends DataTableComponent
 {
@@ -16,6 +19,35 @@ class PurchaseTable extends DataTableComponent
     {
         $this->setPrimaryKey('id');
         $this->setDefaultSort('id', 'desc');
+    }
+
+    public function filters(): array
+    {
+        return[
+            DateRangeFilter::make('Fecha')
+                ->config([
+                    'placeholder' => 'Seleccione rango de fechas',
+                ])
+                ->filter(function($query, array $dateRange){
+                    $query->whereBetween('date', [
+                        $dateRange['minDate'],
+                        $dateRange['maxDate']
+                    ]);
+                }),
+
+            MultiSelectFilter::make('Proveedor')
+                ->options(
+                    Supplier::query()
+                        ->orderBy('name')
+                        ->get()
+                        ->keyBy('id')
+                        ->map(fn($tag) => $tag->name)
+                        ->toArray()
+                )
+                ->filter(function($query, array $selected){
+                    $query->whereIn('supplier_id', $selected);
+                }),
+        ];
     }
 
     public function columns(): array
@@ -37,6 +69,7 @@ class PurchaseTable extends DataTableComponent
                 ->sortable(),
             
             Column::make("Razón social", "supplier.name")
+                ->searchable()
                 ->sortable(),
 
             Column::make("Total", "total")
