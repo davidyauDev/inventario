@@ -1,5 +1,5 @@
 <div x-data="{
-    products: @entangle('products'),
+    products: @entangle('products').live,
 
     total: @entangle('total'),
 
@@ -57,7 +57,7 @@
                     label="Fecha"
                     wire:model="date"
                     type="date" />
-
+        
                 <x-wire-select
                     class="lg:col-span-2"
                     label="Almacenes"
@@ -70,6 +70,7 @@
                     option-label="name"
                     option-value="id"
                     option-description="description"
+                    :disabled="count($products)"
                 />
 
                 <x-wire-select
@@ -126,7 +127,7 @@
                                 Cantidad
                             </th>
                             <th class="py-2 px-4">
-                                Precio
+                                Precio costo
                             </th>
                             <th class="py-2 px-4">
                                 Subtotal

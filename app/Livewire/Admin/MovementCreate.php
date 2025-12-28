@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Inventory;
 use App\Models\Movement;
 use App\Models\Product;
 use App\Models\Quote;
+use App\Services\KardexService;
 use Livewire\Component;
 
 class MovementCreate extends Component
@@ -70,8 +72,11 @@ class MovementCreate extends Component
     {
         $this->validate([
             'product_id' => 'required|exists:products,id',
+            'warehouse_id' => 'required|exists:warehouses,id',
         ],[],[
             'product_id' => 'producto',
+            'warehouse_id' => 'almacén',
+
         ]);
 
         $existing = collect($this->products)
@@ -89,19 +94,27 @@ class MovementCreate extends Component
         }
 
         $product = Product::find($this->product_id);
+        
+        $lastRecord = Inventory::where('product_id', $product->id)
+                ->where('warehouse_id', $this->warehouse_id)
+                ->latest('id')
+                ->first();
+
+    
+        $costBalance = $lastRecord?->cost_balance ?? 0;
 
         $this->products[] = [
             'id' => $product->id,
             'name' => $product->name,
             'quantity' => 1,
-            'price' => $product->price,
-            'subtotal' => $product->price,
+            'price' => $costBalance,
+            'subtotal' => $costBalance,
         ];
 
         $this->reset('product_id');
     }
 
-    public function save()
+    public function save(KardexService $kardex)
     {
         $this->validate([
             'type' => 'required|in:1,2',
@@ -143,6 +156,12 @@ class MovementCreate extends Component
                 'price' => $product['price'],
                 'subtotal' => $product['quantity'] * $product['price'],
             ]);
+
+            if($this->type == 1){
+                $kardex ->registerEntry ($movement, $product, $this->warehouse_id, 'Movimiento');
+            } elseif ($this->type == 2) {
+                $kardex ->registerExit ($movement, $product, $this->warehouse_id, 'Movimiento');
+            }
         }
 
         session()->flash('swal', [

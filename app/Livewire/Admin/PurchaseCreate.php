@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchaseOrder;
+use App\Services\KardexService;
 use Livewire\Component;
 
 class PurchaseCreate extends Component
@@ -55,8 +57,6 @@ class PurchaseCreate extends Component
             }
         });
     }
-
-
 
     public function updated($property, $value)
     {
@@ -119,7 +119,7 @@ class PurchaseCreate extends Component
         $this->reset('product_id');
     }
 
-    public function save()
+    public function save(KardexService $kardex)
     {
         $this->validate([
             'voucher_type' => 'required|in:1,2',
@@ -162,6 +162,10 @@ class PurchaseCreate extends Component
                 'price' => $product['price'],
                 'subtotal' => $product['quantity'] * $product['price'],
             ]);
+
+            //Kardex
+            $kardex->registerEntry($purchase, $product, $this->warehouse_id, 'Compra');
+
         }
 
         session()->flash('swal', [
