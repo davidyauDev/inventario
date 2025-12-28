@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Facades\Kardex;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Purchase;
@@ -88,8 +89,10 @@ class PurchaseCreate extends Component
     {
         $this->validate([
             'product_id' => 'required|exists:products,id',
+            'warehouse_id' => 'required|exists:warehouses,id'
         ],[],[
             'product_id' => 'producto',
+            'warehouse_id' => 'almacén'
         ]);
 
         $existing = collect($this->products)
@@ -108,18 +111,23 @@ class PurchaseCreate extends Component
 
         $product = Product::find($this->product_id);
 
+        $lastRecord = Kardex::getLastRecord(
+            $product->id,
+            $this->warehouse_id
+        );
+
         $this->products[] = [
             'id' => $product->id,
             'name' => $product->name,
             'quantity' => 1,
-            'price' => 0,
-            'subtotal' => 0,
+            'price' => $lastRecord['cost'],
+            'subtotal' => $lastRecord['cost'],
         ];
 
         $this->reset('product_id');
     }
 
-    public function save(KardexService $kardex)
+    public function save()
     {
         $this->validate([
             'voucher_type' => 'required|in:1,2',
@@ -164,7 +172,7 @@ class PurchaseCreate extends Component
             ]);
 
             //Kardex
-            $kardex->registerEntry($purchase, $product, $this->warehouse_id, 'Compra');
+            Kardex::registerEntry($purchase, $product, $this->warehouse_id, 'Compra');
 
         }
 

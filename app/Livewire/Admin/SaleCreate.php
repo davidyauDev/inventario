@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Facades\Kardex;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Purchase;
@@ -127,7 +128,7 @@ class SaleCreate extends Component
         $this->reset('product_id');
     }
 
-    public function save(KardexService $kardex)
+    public function save()
     {
         $this->validate([
             'voucher_type' => 'required|in:1,2',
@@ -171,7 +172,7 @@ class SaleCreate extends Component
                 'subtotal' => $product['quantity'] * $product['price'],
             ]);
 
-            $kardex->registerExit($sale, $product, $this->warehouse_id, 'Venta');
+            Kardex::registerExit($sale, $product, $this->warehouse_id, 'Venta');
         }
 
 

@@ -23,12 +23,13 @@ Route::get('/', function(){
 Route::resource('categories',CategoryController::class)->except(['show']);
 
 Route::resource('products',ProductController::class)->except(['show']);
-
 Route::post('products/{product}/dropzone', [ProductController::class, 'dropzone'])
     ->name('products.dropzone');
 
-Route::resource('warehouses',WarehouseController::class)->except(['show']);
+Route::get('products/{product}/kardex', [ProductController::class, 'kardex'])
+    ->name('products.kardex');
 
+Route::resource('warehouses',WarehouseController::class)->except(['show']);
 
 //Compras
 Route::resource('suppliers',SupplierController::class)->except(['show']);
