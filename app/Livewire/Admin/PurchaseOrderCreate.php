@@ -79,6 +79,7 @@ class PurchaseOrderCreate extends Component
         }
 
         $product = Product::find($this->product_id);
+        
 
         $this->products[] = [
             'id' => $product->id,

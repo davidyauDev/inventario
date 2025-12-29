@@ -26,6 +26,7 @@ class PurchaseOrder extends Model
     {
         return $this->belongsTo(Supplier::class);
     }
+    
 
     //Relación muchos a muchos polimórfica
     public function products()
