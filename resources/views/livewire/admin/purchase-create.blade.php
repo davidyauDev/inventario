@@ -90,7 +90,7 @@
                 <div class ="col-span-2">
                     <x-wire-select
                     label="Almacenes"
-                    wire:model="warehouse_id"
+                    wire:model.live="warehouse_id"
                     placeholder="Seleccione un almacén"
                     :async-data="[
                         'api' => route('api.warehouses.index'),
@@ -99,7 +99,7 @@
                     option-label="name"
                     option-value="id"
                     option-description="description"
-                    :disabled="count($products)"
+                    :disabled="count($products) > 0 && !empty($warehouse_id)"
                 />
                 </div>
 

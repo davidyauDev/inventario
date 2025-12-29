@@ -1,13 +1,13 @@
 <x-admin-layout 
-title="Compras"
+title="Ventas"
 :breadcrumbs="[
     [
         'name' => 'Dashboard',
         'href' => route('admin.dashboard'),
     ],
     [
-        'name' => 'Compras',
-        'href' => route('admin.purchases.index'),
+        'name' => 'Ventas',
+        'href' => route('admin.sales.index'),
     ],
     [
         'name' => 'Nuevo',
