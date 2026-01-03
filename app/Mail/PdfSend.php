@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PdfSend extends Mailable
+class PdfSend extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -31,7 +31,7 @@ class PdfSend extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pdf Send',
+            subject: $this->form['document'],
         );
     }
 
@@ -56,7 +56,7 @@ class PdfSend extends Mailable
     public function attachments(): array
     {
         $pdf = Pdf::loadView($this->form['view_pdf_path'], [
-            'purchase' => $this->form['model'],
+            'model' => $this->form['model'],
         ])->output();
 
         return [

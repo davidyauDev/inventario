@@ -29,7 +29,6 @@ class ImportOfProducts extends Component
         ]);
 
         $productsImport = new \App\Imports\ProductsImport();
-
         Excel::import($productsImport, $this->file);
 
         $this->errors= $productsImport->getErrors();

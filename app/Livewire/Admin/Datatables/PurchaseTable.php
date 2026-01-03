@@ -23,7 +23,7 @@ class PurchaseTable extends DataTableComponent
 
         $this->setConfigurableAreas([
             'after-wrapper' => [
-                'admin.purchases.modal',
+                'admin.pdf.modal',
             ],
         ]);
     }

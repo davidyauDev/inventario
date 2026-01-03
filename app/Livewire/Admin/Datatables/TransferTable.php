@@ -8,6 +8,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Quote;
 use App\Models\Transfer;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Mail;
 use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
 
 class TransferTable extends DataTableComponent
@@ -18,6 +19,12 @@ class TransferTable extends DataTableComponent
     {
         $this->setPrimaryKey('id');
         $this->setDefaultSort('id', 'desc');
+
+        $this->setConfigurableAreas([
+            'after-wrapper' => [
+                'admin.pdf.modal',
+            ],
+        ]);
     }
 
     public function filters(): array
@@ -77,5 +84,44 @@ class TransferTable extends DataTableComponent
                 'originWarehouse',
                 'destinationWarehouse',
             ]);
+    }
+
+    //Propiedades
+    public $form = [
+        'open' => false,
+        'document' => '',
+        'client' => '',
+        'email' => '',
+        'model' => null,
+        'view_pdf_path' => 'admin.transfers.pdf',
+    ];
+
+    //Metodo
+    public function openModal(Transfer $transfer)
+    {
+        $this->form['open'] = true;
+        $this->form['document'] = 'Transferencia ' . $transfer->serie . '-' . $transfer->correlative;
+        $this->form['client'] = $transfer->originWarehouse->name;
+        $this->form['email'] = '';
+        $this->form['model'] = $transfer;
+    }
+
+    public function sendEmail()
+    {
+        $this->validate([
+            'form.email' => 'required|email',
+        ]);
+
+        //Llamar a un mailable
+        Mail::to($this->form['email'])
+            ->send(new \App\Mail\PdfSend($this->form));
+
+        $this->dispatch('swal',[
+            'icon' => 'success',
+            'title' => 'Correo enviado',
+            'text' => 'El correo ha sido enviado correctamente.',
+        ]);
+
+        $this->reset('form');
     }
 }

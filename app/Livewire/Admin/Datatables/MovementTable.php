@@ -7,6 +7,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Quote;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Mail;
 use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
 
 class MovementTable extends DataTableComponent
@@ -17,6 +18,12 @@ class MovementTable extends DataTableComponent
     {
         $this->setPrimaryKey('id');
         $this->setDefaultSort('id', 'desc');
+
+        $this->setConfigurableAreas([
+            'after-wrapper' => [
+                'admin.pdf.modal',
+            ],
+        ]);
     }
 
     public function filters(): array
@@ -87,5 +94,44 @@ class MovementTable extends DataTableComponent
                 'warehouse',
                 'reason',
             ]);
+    }
+
+    //Propiedades
+    public $form = [
+        'open' => false,
+        'document' => '',
+        'client' => '',
+        'email' => '',
+        'model' => null,
+        'view_pdf_path' => 'admin.movements.pdf',
+    ];
+
+    //Metodo
+    public function openModal(Movement $movement)
+    {
+        $this->form['open'] = true;
+        $this->form['document'] = 'Movimiento ' . $movement->serie . '-' . $movement->correlative;
+        $this->form['client'] = $movement->warehouse->name;
+        $this->form['email'] = '';
+        $this->form['model'] = $movement;
+    }
+
+    public function sendEmail()
+    {
+        $this->validate([
+            'form.email' => 'required|email',
+        ]);
+
+        //Llamar a un mailable
+        Mail::to($this->form['email'])
+            ->send(new \App\Mail\PdfSend($this->form));
+
+        $this->dispatch('swal',[
+            'icon' => 'success',
+            'title' => 'Correo enviado',
+            'text' => 'El correo ha sido enviado correctamente.',
+        ]);
+
+        $this->reset('form');
     }
 }

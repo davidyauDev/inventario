@@ -6,6 +6,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\PurchaseOrder;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Mail;
 use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
 
 class PurchaseOrderTable extends DataTableComponent
@@ -16,6 +17,12 @@ class PurchaseOrderTable extends DataTableComponent
     {
         $this->setPrimaryKey('id');
         $this->setDefaultSort('id', 'desc');
+
+        $this->setConfigurableAreas([
+            'after-wrapper' => [
+                'admin.pdf.modal',
+            ],
+        ]);
     }
 
     public function filters(): array
@@ -72,5 +79,44 @@ class PurchaseOrderTable extends DataTableComponent
     {
         return PurchaseOrder::query()
             ->with(['supplier']);
+    }
+
+    //Propiedades
+    public $form = [
+        'open' => false,
+        'document' => '',
+        'client' => '',
+        'email' => '',
+        'model' => null,
+        'view_pdf_path' => 'admin.purchase_orders.pdf',
+    ];
+
+    //Metodo
+    public function openModal(PurchaseOrder $purchaseOrder)
+    {
+        $this->form['open'] = true;
+        $this->form['document'] = 'Orden de Compra ' . $purchaseOrder->serie . '-' . $purchaseOrder->correlative;
+        $this->form['client'] = $purchaseOrder->supplier->document_number . ' - ' . $purchaseOrder->supplier->name;
+        $this->form['email'] = $purchaseOrder->supplier->email;
+        $this->form['model'] = $purchaseOrder;
+    }
+
+    public function sendEmail()
+    {
+        $this->validate([
+            'form.email' => 'required|email',
+        ]);
+
+        //Llamar a un mailable
+        Mail::to($this->form['email'])
+            ->send(new \App\Mail\PdfSend($this->form));
+
+        $this->dispatch('swal',[
+            'icon' => 'success',
+            'title' => 'Correo enviado',
+            'text' => 'El correo ha sido enviado correctamente.',
+        ]);
+
+        $this->reset('form');
     }
 }
