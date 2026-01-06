@@ -38,6 +38,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
+            'min_stock' => 'required|integer|min:0',
         ]);
 
         $product = Product::create($data);
@@ -71,6 +72,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
+            'min_stock' => 'required|integer|min:0',
         ]);
 
         $product->update($data);

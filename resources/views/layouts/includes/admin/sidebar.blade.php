@@ -117,8 +117,28 @@
         [
             'name' => 'Reportes',
             'icon' => 'fa-solid fa-chart-line',
-            'active' => false,
-            'href' => '',
+            'active' => request()->routeIs([
+                'admin.reports.top-products',
+                'admin.reports.top-customers',
+                'admin.reports.low-stock',   
+            ]),
+            'submenu' => [
+                [
+                    'name' => 'Productos top',
+                    'href' => route('admin.reports.top-products'),
+                    'active' => request()->routeIs('admin.reports.top-products'),
+                ],
+                [
+                    'name' => 'Clientes frecuentes',
+                    'href' => route('admin.reports.top-customers'),
+                    'active' => request()->routeIs('admin.reports.top-customers'),
+                ],
+                [
+                    'name' => 'Stock bajo',    
+                    'href' => route('admin.reports.low-stock'),
+                    'active' => request()->routeIs('admin.reports.low-stock'),
+                ],    
+            ],
         ],
 
         [

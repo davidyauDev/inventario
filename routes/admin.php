@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\MovementController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\PurchaseOrderController;
 use App\Http\Controllers\Admin\QuoteController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\TransferController;
@@ -78,3 +79,11 @@ Route::get('transfers/{transfer}/pdf', [TransferController::class, 'pdf'])
 
 Route::delete('images/{image}', [ImageController::class, 'destroy'])
     ->name('images.destroy');
+
+//Reportes
+Route::get('reports/top-products', [ReportController::class, 'topProducts'])
+    ->name('reports.top-products');
+Route::get('reports/top-customers', [ReportController::class, 'topCustomers'])
+    ->name('reports.top-customers');
+Route::get('reports/low-stock', [ReportController::class, 'lowStock'])
+    ->name('reports.low-stock');

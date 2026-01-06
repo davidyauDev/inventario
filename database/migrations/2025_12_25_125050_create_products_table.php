@@ -37,6 +37,9 @@ return new class extends Migration
             $table->integer('stock')
                 ->default(0);
 
+            $table->integer('min_stock')
+                ->default(5);
+
             $table->timestamps();
         });
     }

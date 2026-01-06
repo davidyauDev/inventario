@@ -48,6 +48,13 @@ title="Productos"
                 @endforeach
             </x-wire-native-select>
 
+            <x-wire-input 
+                label="Stock mínimo"
+                name="min_stock"
+                type="number"
+                placeholder="Cantidad mínima de stock"
+                value="{{ old('min_stock', $product->min_stock) }}" />
+
             <div class="flex justify-end">
                 <x-button>
                     Actualizar
