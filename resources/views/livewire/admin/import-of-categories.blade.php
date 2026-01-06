@@ -1,7 +1,7 @@
 <div>
     <x-wire-card>
         <h1 class="text-2xl font-semibold text-gray-800 mb-6">
-            Importar productos desde Excel
+            Importar categorías desde Excel
         </h1>
 
         <x-wire-button blue wire:click="downloadTemplate">
@@ -10,7 +10,7 @@
         </x-wire-button>
 
         <p class="text-sm text-gray-500 mt-1">
-            Completa la plantilla con los datos de tus productos y súbelas aquí.
+            Completa la plantilla con los datos de tus categorías y súbelas aquí.
         </p>
 
         <div class="mt-4">
@@ -22,12 +22,12 @@
         <div class="mt-4">
             <x-wire-button 
                 green 
-                wire:click="importProducts"
+                wire:click="importCategories"
                 wire:loading.attr="disabled"
                 wire:target="file"
-                spinner="importProducts">
+                spinner="importCategories">
                 <i class="fas fa-upload mr-2"></i>
-                Importar productos
+                Importar Categorías
             </x-wire-button>
         </div>
 
@@ -41,13 +41,13 @@
                         <i class="fas fa-triangle-exclamation mr-2"></i>
                         <strong>Importación completada parcialmente</strong>
                         <p class="mt-1 text-sm">
-                            Algunos productos no se pudieron importar debido a errores.
+                            Algunas categorías no se pudieron importar debido a errores.
                         </p>
                     @else
                         <i class="fas fa-xmark mr-2"></i>
-                        <strong>No se importo ningun producto</strong>
+                        <strong>No se importo ninguna categoría</strong>
                         <p class="mt-1 text-sm">
-                            Todos los productos tienen errores o el archivo no es válido.
+                            Todas las categorías tienen errores o el archivo no es válido.
                         </p>
                     @endif
                 </div>
@@ -75,6 +75,6 @@
             </div>
 
         @endif
-    </x-wire-card>
 
+    </x-wire-card>
 </div>

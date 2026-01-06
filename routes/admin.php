@@ -21,6 +21,8 @@ Route::get('/', function(){
 
 //Inventario
 Route::resource('categories',CategoryController::class)->except(['show']);
+Route::get('categories/import', [CategoryController::class, 'import'])
+    ->name('categories.import');
 
 Route::resource('products',ProductController::class)->except(['show']);
 Route::post('products/{product}/dropzone', [ProductController::class, 'dropzone'])
@@ -31,6 +33,8 @@ Route::get('products/import', [ProductController::class, 'import'])
     ->name('products.import');
 
 Route::resource('warehouses',WarehouseController::class)->except(['show']);
+Route::get('warehouses/import', [WarehouseController::class, 'import'])
+    ->name('warehouses.import');
 
 //Compras
 Route::resource('suppliers',SupplierController::class)->except(['show']);

@@ -7,11 +7,16 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Quote;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use Rappasoft\LaravelLivewireTables\Views\Filters\DateRangeFilter;
 
 class QuoteTable extends DataTableComponent
 {
-    //protected $model = PurchaseOrder::class;
+    public function builder(): Builder
+    {
+        return Quote::query()
+            ->with(['customer']);
+    }
 
     public function configure(): void
     {
@@ -75,11 +80,28 @@ class QuoteTable extends DataTableComponent
         ];
     }
 
-    public function builder(): Builder
+    public function bulkActions():array
     {
-        return Quote::query()
-            ->with(['customer']);
+        return [
+            'exportSelected' => 'Exportar'
+        ];
     }
+
+    public function exportSelected()
+    {
+        $selected = $this->getSelected();
+
+        $quotes = count($selected)
+            ? Quote::whereIn('id', $selected)
+                ->with(['customer.identity'])
+                ->get()
+            : Quote::with(['customer.identity'])
+                ->get();
+
+        return Excel::download(new \App\Exports\QuotesExport($quotes), 'quotes.xlsx');
+    }
+
+    
 
     //Propiedades
     public $form = [
