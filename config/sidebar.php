@@ -172,7 +172,9 @@ return [
     [
         'type' => 'link',
         'title' => 'Usuarios',
-        'icon' => 'fa-solid fa-users',    
+        'icon' => 'fa-solid fa-users',
+        'route' => 'admin.users.index',  
+        'active' => 'admin.users.*',   
     ],
 
     [

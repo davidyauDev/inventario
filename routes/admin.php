@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\TransferController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
@@ -87,3 +88,5 @@ Route::get('reports/top-customers', [ReportController::class, 'topCustomers'])
     ->name('reports.top-customers');
 Route::get('reports/low-stock', [ReportController::class, 'lowStock'])
     ->name('reports.low-stock');
+
+Route::resource('users', UserController::class);
