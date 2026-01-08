@@ -53,12 +53,12 @@
                     {{ $action }}
                 </div>
                 
-            @endisset 
-
-            
+            @endisset     
 
         </div>
-        {{ $slot }}
+
+        {{$slot}}
+
     </div> 
 
 
