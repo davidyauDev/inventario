@@ -20,12 +20,16 @@ title="Clientes"
         </style>
     @endpush
     
-    <x-slot name="action">
-        <x-wire-button href="{{route('admin.customers.create')}}" blue>
-            Nuevo
+    @can('create-customers')
 
-        </x-wire-button>
-    </x-slot>
+        <x-slot name="action">
+            <x-wire-button href="{{route('admin.customers.create')}}" blue>
+                Nuevo
+
+            </x-wire-button>
+        </x-slot>
+        
+    @endcan
 
     @livewire('admin.datatables.customer-table')
 

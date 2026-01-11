@@ -10,20 +10,23 @@ title="Almacenes"
         
     ]
 ]">
-    
-    <x-slot name="action">
+    @can('create-warehouses')
 
-        <x-wire-button href="{{route('admin.warehouses.import')}}" green>
-            <i class="fas fa-file-import"></i>
-            Importar
-        </x-wire-button>
+        <x-slot name="action">
 
-        <x-wire-button href="{{route('admin.warehouses.create')}}" blue>
-            <i class="fas fa-plus"></i>
-            Nuevo
+            <x-wire-button href="{{route('admin.warehouses.import')}}" green>
+                <i class="fas fa-file-import"></i>
+                Importar
+            </x-wire-button>
 
-        </x-wire-button>
-    </x-slot>
+            <x-wire-button href="{{route('admin.warehouses.create')}}" blue>
+                <i class="fas fa-plus"></i>
+                Nuevo
+
+            </x-wire-button>
+        </x-slot>
+
+    @endcan
 
     @livewire('admin.datatables.warehouse-table')
 

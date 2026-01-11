@@ -187,12 +187,6 @@ return [
 
     [
         'type' => 'link',
-        'title' => 'Permisos',
-        'icon' => 'fa-solid fa-lock',
-    ],
-
-    [
-        'type' => 'link',
         'title' => 'Ajustes',
         'icon' => 'fa-solid fa-gear',
     ],

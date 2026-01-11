@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Identity;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SupplierController extends Controller
 {
@@ -14,6 +15,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
+        Gate::authorize('read-suppliers');
+
         return view('admin.suppliers.index');
     }
 
@@ -22,6 +25,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create-suppliers');
 
         $identities = Identity::all();
 
@@ -34,6 +38,8 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create-suppliers');
+
         $data = $request->validate([
             'identity_id' => 'required|exists:identities,id',
             'document_number' => 'required|string|max:20|unique:suppliers,document_number',
@@ -61,6 +67,8 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
+        Gate::authorize('update-suppliers');
+
         $identities = Identity::all();
 
         return view('admin.suppliers.edit', compact('supplier', 'identities'));
@@ -71,6 +79,8 @@ class SupplierController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
+        Gate::authorize('update-suppliers');
+
         $data = $request->validate([
             'identity_id' => 'required|exists:identities,id',
             'document_number' => 'required|string|max:20|unique:suppliers,document_number,' . $supplier->id,
@@ -96,6 +106,7 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
+        Gate::authorize('delete-suppliers');
 
         if($supplier->purchaseOrders()->exists() || $supplier->purchases()->exists())
         {

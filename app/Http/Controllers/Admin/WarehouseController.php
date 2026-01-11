@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class WarehouseController extends Controller
 {
@@ -13,6 +14,8 @@ class WarehouseController extends Controller
      */
     public function index()
     {
+        Gate::authorize('read-warehouses');
+
         return view('admin.warehouses.index');
     }
 
@@ -21,6 +24,8 @@ class WarehouseController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create-warehouses');
+
         return view('admin.warehouses.create');
     }
 
@@ -29,6 +34,8 @@ class WarehouseController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create-warehouses');
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
@@ -51,6 +58,8 @@ class WarehouseController extends Controller
      */
     public function edit(Warehouse $warehouse)
     {
+        Gate::authorize('update-warehouses');
+
         return view('admin.warehouses.edit', compact('warehouse'));
     }
 
@@ -59,6 +68,8 @@ class WarehouseController extends Controller
      */
     public function update(Request $request, Warehouse $warehouse)
     {
+        Gate::authorize('update-warehouses');
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
@@ -80,6 +91,8 @@ class WarehouseController extends Controller
      */
     public function destroy(Warehouse $warehouse)
     {
+        Gate::authorize('delete-warehouses');
+
         if($warehouse->inventories()->exists()) {
             session()->flash('swal', [
                 'icon' => 'error',
@@ -104,6 +117,8 @@ class WarehouseController extends Controller
 
     public function import()
     {
+        Gate::authorize('create-warehouses');
+
         return view('admin.warehouses.import');
         
     }

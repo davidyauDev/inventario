@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -13,6 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        Gate::authorize('read-categories');
+
         return view('admin.categories.index');
     }
 
@@ -21,6 +24,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create-categories');
+
         return view('admin.categories.create');
     }
 
@@ -29,6 +34,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create-categories');
 
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
@@ -53,6 +59,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        Gate::authorize('update-categories');
+
         return view('admin.categories.edit', compact('category'));
     }
 
@@ -61,6 +69,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        Gate::authorize('update-categories');
+
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string|max:1000',
@@ -82,7 +92,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-
+        Gate::authorize('delete-categories');
 
         if($category->products()->exists()){
         
@@ -108,7 +118,8 @@ class CategoryController extends Controller
 
     public function import()
     {
+        Gate::authorize('create-categories');
+
         return view('admin.categories.import');
-        
     }
 }

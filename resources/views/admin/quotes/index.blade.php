@@ -11,12 +11,15 @@ title="Cotizaciones"
     ]
 ]">
     
-    <x-slot name="action">
-        <x-wire-button href="{{route('admin.quotes.create')}}" blue>
-            Nuevo
+    @can('create-quotes') 
 
-        </x-wire-button>
-    </x-slot>
+        <x-slot name="action">
+            <x-wire-button href="{{route('admin.quotes.create')}}" blue>
+                Nuevo
+            </x-wire-button>
+        </x-slot>
+        
+    @endcan
 
     @livewire('admin.datatables.quote-table')
 

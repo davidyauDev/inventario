@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -14,6 +15,8 @@ class RoleController extends Controller
      */
     public function index()
     {
+        Gate::authorize('read-roles');
+
         return view('admin.roles.index');
     }
 
@@ -22,6 +25,8 @@ class RoleController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create-roles');
+
         $permissions = Permission::all();
 
         return view('admin.roles.create', compact('permissions'));
@@ -32,6 +37,8 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create-roles');
+
         $data = $request->validate([
             'name'=> 'required|string|max:255|unique:roles,name',
             'permissions' => 'nullable|array',
@@ -57,6 +64,8 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        Gate::authorize('read-roles');
+
         return view('admin.roles.show', compact('role'));
     }
 
@@ -65,6 +74,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        Gate::authorize('update-roles');
+
         $permissions = Permission::all();
 
         return view('admin.roles.edit', compact('role', 'permissions'));
@@ -75,6 +86,8 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
+        Gate::authorize('update-roles');
+
         $data = $request->validate([
             'name'=> 'required|string|max:255|unique:roles,name,' . $role->id,
             'permissions' => 'nullable|array',
@@ -103,6 +116,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        Gate::authorize('delete-roles');
+
         $role->delete();
 
         session()->flash('swal', [
