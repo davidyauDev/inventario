@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\PurchaseOrderController;
 use App\Http\Controllers\Admin\QuoteController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\TransferController;
@@ -90,3 +91,4 @@ Route::get('reports/low-stock', [ReportController::class, 'lowStock'])
     ->name('reports.low-stock');
 
 Route::resource('users', UserController::class);
+Route::resource('roles', RoleController::class);

@@ -180,7 +180,9 @@ return [
     [
         'type' => 'link',
         'title' => 'Roles',
-        'icon' => 'fa-solid fa-shield-halved',    
+        'icon' => 'fa-solid fa-shield-halved',   
+        'route' => 'admin.roles.index',
+        'active' => 'admin.roles.*', 
     ],
 
     [
