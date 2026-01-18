@@ -9,6 +9,7 @@ use App\Models\Purchase;
 use App\Models\PurchaseOrder;
 use App\Models\Quote;
 use App\Models\Sale;
+use App\Models\Warehouse;
 use App\Services\KardexService;
 use Livewire\Component;
 
@@ -39,8 +40,8 @@ class SaleCreate extends Component
     {
         //Verificar si hay errores de validación previos
         $this->withValidator(function ($validator) {
-            if($validator->fails()){
-                
+            if ($validator->fails()) {
+
                 $errors = $validator->errors()->toArray();
 
                 $html = "<ul class='text-left'>";
@@ -56,7 +57,6 @@ class SaleCreate extends Component
                     'title' => 'Error de validación',
                     'html' => $html,
                 ]);
-
             }
         });
     }
@@ -64,22 +64,22 @@ class SaleCreate extends Component
     public function mount()
     {
         $this->correlative = Quote::max('correlative') + 1;
+        $this->date = date('Y-m-d');
+        $this->warehouse_id = Warehouse::first()?->id;
     }
 
 
     public function updated($property, $value)
     {
-        if($property == "quote_id")
-        {
+        if ($property == "quote_id") {
             $quote = Quote::find($value);
 
-            if($quote)
-            {
+            if ($quote) {
                 $this->voucher_type = $quote->voucher_type;
 
                 $this->customer_id = $quote->customer_id;
 
-                $this->products = $quote->products->map(function($product){
+                $this->products = $quote->products->map(function ($product) {
                     return [
                         'id' => $product->id,
                         'name' => $product->name,
@@ -90,14 +90,13 @@ class SaleCreate extends Component
                 })->toArray();
             }
         }
-        
     }
 
     public function addProduct()
     {
         $this->validate([
             'product_id' => 'required|exists:products,id',
-        ],[],[
+        ], [], [
             'product_id' => 'producto',
         ]);
 
@@ -144,7 +143,7 @@ class SaleCreate extends Component
             'products.*.id' => 'required|exists:products,id',
             'products.*.quantity' => 'required|numeric|min:1',
             'products.*.price' => 'required|numeric|min:0',
-        ],[],[
+        ], [], [
             'voucher_type' => 'tipo de comprobante',
             'customer_id' => 'cliente',
             'observation' => 'observación',

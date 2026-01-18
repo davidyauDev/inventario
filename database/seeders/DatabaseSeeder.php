@@ -27,9 +27,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
         ]);
 
-        Customer::factory(50)->create();
-        Supplier::factory(5)->create();
-        Product::factory(100)->create();
-
+        Customer::factory(1)->create();
+        Supplier::factory(1)->create();
+        Product::factory(1)->create();
     }
 }

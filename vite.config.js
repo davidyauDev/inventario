@@ -8,10 +8,4 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-    server: {
-        host: 'inventario.test',
-        hmr: {
-            host: 'inventario.test',
-        },
-    },
 });
