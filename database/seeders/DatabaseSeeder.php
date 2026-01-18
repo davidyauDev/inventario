@@ -21,14 +21,14 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             IdentitySeeder::class,
-            CategorySeeder::class,
+            //CategorySeeder::class,
             WarehouseSeeder::class,
             ReasonSeeder::class,
             RoleSeeder::class,
         ]);
 
-        Customer::factory(1)->create();
-        Supplier::factory(1)->create();
-        Product::factory(1)->create();
+        //Customer::factory(1)->create();
+        //Supplier::factory(1)->create();
+        //Product::factory(1)->create();
     }
 }

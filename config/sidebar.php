@@ -13,7 +13,7 @@ return [
         'route' => 'admin.dashboard',
         'active' => 'admin.dashboard',
     ],
-    
+
     [
         'type' => 'group',
         'title' => 'Inventario',
@@ -116,7 +116,7 @@ return [
         'icon' => 'fa-solid fa-arrows-rotate',
         'active' => [
             'admin.movements.*',
-            'admin.transfers.*',
+            // 'admin.transfers.*',
         ],
         'items' => [
             [
@@ -125,12 +125,12 @@ return [
                 'route' => 'admin.movements.index',
                 'active' => 'admin.movements.*',
             ],
-            [
-                'type' => 'link',
-                'title' => 'Transferencias',
-                'route' => 'admin.transfers.index',
-                'active' => 'admin.transfers.*',
-            ],
+            // [
+            //     'type' => 'link',
+            //     'title' => 'Transferencias',
+            //     'route' => 'admin.transfers.index',
+            //     'active' => 'admin.transfers.*',
+            // ],
         ],
     ],
 
@@ -141,7 +141,7 @@ return [
         'active' => [
             'admin.reports.top-products',
             'admin.reports.top-customers',
-            'admin.reports.low-stock',   
+            'admin.reports.low-stock',
         ],
         'items' => [
             [
@@ -158,10 +158,10 @@ return [
             ],
             [
                 'type' => 'link',
-                'title' => 'Stock bajo',    
+                'title' => 'Stock bajo',
                 'route' => 'admin.reports.low-stock',
                 'active' => 'admin.reports.low-stock',
-            ],    
+            ],
         ],
     ],
 
@@ -173,16 +173,16 @@ return [
         'type' => 'link',
         'title' => 'Usuarios',
         'icon' => 'fa-solid fa-users',
-        'route' => 'admin.users.index',  
-        'active' => 'admin.users.*',   
+        'route' => 'admin.users.index',
+        'active' => 'admin.users.*',
     ],
 
     [
         'type' => 'link',
         'title' => 'Roles',
-        'icon' => 'fa-solid fa-shield-halved',   
+        'icon' => 'fa-solid fa-shield-halved',
         'route' => 'admin.roles.index',
-        'active' => 'admin.roles.*', 
+        'active' => 'admin.roles.*',
     ],
 
     [
